@@ -7,11 +7,13 @@ jobs:
   gh-pages-deploy:
     name: Deploying to gh-pages
     runs-on: ubuntu-latest
+
     steps:
       - name: Setup Node.js for use with actions
-        uses: actions/setup-node@v1.1.0
+        uses: actions/setup-node@v1
         with:
           version:  14.x
+
       - name: Checkout branch
         uses: actions/checkout@v2
 
