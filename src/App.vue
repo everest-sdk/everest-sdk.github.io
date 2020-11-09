@@ -1,16 +1,87 @@
 <template>
   <v-app>
 
-    <v-app-bar
-      color="deep-purple accent-4"
-      dense
-      dark
+    <v-navigation-drawer
+      v-model="localDrawer"
+      app
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+
+
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title class="title">
+            Application
+          </v-list-item-title>
+          <v-list-item-subtitle>
+            subtext
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-divider></v-divider>
+
+      <v-list dense nav>
+
+        <v-list-item
+          v-for="item in items"
+          :key="item.title"
+          link
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+      </v-list>
+
+     <!-- <v-list
+        nav
+        dense
+      >
+        <v-list-item-group
+          v-model="group"
+          active-class="deep-purple&#45;&#45;text text&#45;&#45;accent-4"
+        >
+          <v-list-item>
+            <v-list-item-title><router-link to="/">Home</router-link></v-list-item-title>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-title><router-link to="/about">About</router-link></v-list-item-title>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-title>Fizz</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-title>Buzz</v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>-->
+    </v-navigation-drawer>
+
+    <v-app-bar
+      color="primary"
+      flat
+      app
+    >
+      <v-app-bar-nav-icon @click.stop="openDrawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>Page title</v-toolbar-title>
 
       <v-spacer></v-spacer>
+
+
+        <v-switch
+          v-model="switch1"
+          dark
+        ></v-switch>
+
 
       <v-btn icon>
         <v-icon>mdi-heart</v-icon>
@@ -46,64 +117,49 @@
       </v-menu>
     </v-app-bar>
 
-    <v-navigation-drawer
-      v-model="drawer"
-      absolute
-      bottom
-      temporary
-    >
-      <v-list
-        nav
-        dense
-      >
-        <v-list-item-group
-          v-model="group"
-          active-class="deep-purple--text text--accent-4"
-        >
-          <v-list-item>
-            <v-list-item-title><router-link to="/">Home</router-link></v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-title><router-link to="/about">About</router-link></v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-title>Fizz</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-title>Buzz</v-list-item-title>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-    </v-navigation-drawer>
-
     <v-main>
       <router-view/>
     </v-main>
+
   </v-app>
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
+  import {Component, Vue} from 'vue-property-decorator';
 
-  export default Vue.extend({
-    name: 'App',
+  @Component({})
+  export default class Home extends Vue {
+    items = [
+      { title: 'Dashboard', icon: 'mdi-view-dashboard' },
+      { title: 'Photos', icon: 'mdi-image' },
+      { title: 'About', icon: 'mdi-help-box' },
+    ];
+    right= null;
+    switch1 = true;
+    private _group = null;
 
-    components: {
+    get group(): any {
+      return this._group;
+    }
 
-    },
+    set group(value: any) {
+      this._group = value;
+    }
 
-    data: () => ({
-      drawer: false,
-      group: null,
-    }),
+    get localDrawer(): any {
+      return this.$store.state.drawer;
+    }
 
-    watch: {
-      group () {
-        this.drawer = false
-      },
-    },
-  });
+    set localDrawer(value: any) {
+      this.$store.state.drawer = value;
+    }
+
+    mounted() {
+      console.log('mounted')
+    }
+
+    openDrawer() {
+      this.$store.dispatch("openDrawer")
+    }
+  }
 </script>

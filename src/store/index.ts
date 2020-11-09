@@ -5,10 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    drawer: false
   },
   mutations: {
+
   },
   actions: {
+    openDrawer() {
+      this.state.drawer = !this.state.drawer
+    }
   },
   modules: {
   }
